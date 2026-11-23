@@ -5,15 +5,10 @@ import org.junit.jupiter.api.condition.*;
 
 import static org.hamcrest.Matchers.*;
 
-/**
- * Runs against OpenAI itself, the only backend here that stores responses. Each test is skipped without
- * {@code OPENAI_API_KEY}: the condition sits on the methods because JUnit does not inherit it from a superclass.
- */
 public abstract class AbstractOpenAiResponsesIT extends AbstractResponsesIT
 {
   private static final String KEY = "OPENAI_API_KEY";
 
-  /** Whether the stack can send {@code store} and {@code previous_response_id}. */
   protected abstract boolean supportsServerState();
 
   @Test

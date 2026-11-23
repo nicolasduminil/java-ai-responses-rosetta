@@ -7,12 +7,12 @@
   <parent>
     <groupId>fr.simplex-software.workshop</groupId>
     <artifactId>java-ai-responses-rosetta</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
   </parent>
 
   <artifactId>responses-common</artifactId>
   <name>Java AI Responses Rosetta :: Common</name>
-  <description>Wire contract, deterministic tool data and the shared conformance suite</description>
+  <description>The common artifacts</description>
 
   <dependencies>
     <dependency>

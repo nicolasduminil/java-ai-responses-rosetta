@@ -5,10 +5,6 @@ import org.springframework.ai.chat.client.*;
 import org.springframework.ai.openai.responses.*;
 import org.springframework.stereotype.*;
 
-/**
- * Spring AI 2.1 always sends {@code store: false} and has no option for {@code previous_response_id}, so
- * {@link Question#previousResponseId()} is ignored here: the conversation cannot continue on the server.
- */
 @Service
 public class SpringAiResponsesService implements ResponsesService
 {

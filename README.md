@@ -21,9 +21,10 @@ held to one conformance suite, so that every difference observed is a property o
 | `responses-langchain4j-boot` | LangChain4j 1.24.0 | Spring Boot 4.2.0 | `OpenAiResponsesChatModel`, declared as a `@Bean` |
 | `responses-langchain4j-quarkus` | Quarkus LangChain4j 1.15.1 (LangChain4j 1.23.0) | Quarkus 3.40.1.1 | produced by the extension, selected by `quarkus.langchain4j.openai.chat-model.mode=responses` |
 
-Java 21 and Maven 3.9 are required. Every version is the latest stable release at the time of writing. Quarkus
-is the single exception: Quarkus LangChain4j 1.15.1, the latest stable release of the extension, is built on
-Quarkus 3.40.1.1, and the line targeting Quarkus 4 is a release candidate.
+Java 21 is required. The Maven wrapper (`./mvnw`) downloads Maven 3.9.16, so no local Maven is needed.
+Every version is the latest stable release at the time of writing. Quarkus is the single exception: Quarkus
+LangChain4j 1.15.1, the latest stable release of the extension, is built on Quarkus 3.40.1.1, and the line
+targeting Quarkus 4 is a release candidate.
 
 ## Layout
 
@@ -124,27 +125,29 @@ because the runs described here were made without an OpenAI key.
 Docker is required for the local tier:
 
 ```bash
-mvn verify
+./mvnw verify
 ```
 
 The OpenAI tier runs in addition when a key is present, at a small cost per run:
 
 ```bash
-OPENAI_API_KEY=sk-... mvn verify
+OPENAI_API_KEY=sk-... ./mvnw verify
 ```
 
 To run one stack against OpenAI, start it and call it:
 
 ```bash
-OPENAI_API_KEY=sk-... mvn -pl responses-spring-ai-boot spring-boot:run
+OPENAI_API_KEY=sk-... ./mvnw -pl responses-spring-ai-boot spring-boot:run
 curl localhost:8080/chat -H 'Content-Type: application/json' -d '{"question":"What is the status of order 42?"}'
 ```
 
 ## Continuous integration
 
-`.circleci/config.yml` pre-pulls the Ollama model and runs `mvn verify` on a machine executor. The OpenAI tier
+`.circleci/config.yml` pre-pulls the Ollama model and runs `./mvnw verify` on a machine executor. The OpenAI tier
 is skipped there unless `OPENAI_API_KEY` is defined as a project environment variable.
 
 ## Version history
 
 1.0.0: first version, three stacks and the two tier conformance suite.
+
+1.0.1: Maven wrapper pinned to Maven 3.9.16, used by the README and the CircleCI pipeline. Unused AssertJ version management removed from the parent POM.

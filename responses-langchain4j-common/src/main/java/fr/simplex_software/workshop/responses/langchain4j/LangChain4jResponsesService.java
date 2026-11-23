@@ -10,11 +10,6 @@ import fr.simplex_software.workshop.responses.api.*;
 
 import java.util.*;
 
-/**
- * Talks to the Responses chat model directly rather than through an AI service: the Responses specific request
- * parameters ({@code previous_response_id}, hosted server tools) travel in {@link OpenAiResponsesChatRequestParameters},
- * which an AI service does not let a caller set per invocation.
- */
 public class LangChain4jResponsesService implements ResponsesService
 {
   private static final List<Map<String, Object>> WEB_SEARCH = List.of(Map.of("type", "web_search"));

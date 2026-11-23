@@ -14,12 +14,12 @@ executors:
 commands:
   restore-maven-cache:
     description: >
-      Cache key is derived from every pom.xml in the tree rather than an enumerated list,
-      so adding a module does not require editing this file.
+      Cache key is derived from every pom.xml in the tree and the wrapper properties rather
+      than an enumerated list, so adding a module does not require editing this file.
     steps:
       - run:
           name: Compute dependency cache key
-          command: find . -name pom.xml -type f | sort | xargs cat | md5sum > .maven-cache-key
+          command: find . -name pom.xml -type f | sort | xargs cat .mvn/wrapper/maven-wrapper.properties | md5sum > .maven-cache-key
       - restore_cache:
           keys:
             - maven-v1-{{ checksum ".maven-cache-key" }}
@@ -31,6 +31,7 @@ commands:
           key: maven-v1-{{ checksum ".maven-cache-key" }}
           paths:
             - ~/.m2/repository
+            - ~/.m2/wrapper
 
 jobs:
   build-and-test:
@@ -53,7 +54,7 @@ jobs:
             docker rm -f ollama-warm
       - run:
           name: Build and verify all modules (OpenAI tests skip without OPENAI_API_KEY)
-          command: mvn -B -ntp verify
+          command: ./mvnw -B -ntp verify
       - save-maven-cache
       - run:
           name: Collect test reports

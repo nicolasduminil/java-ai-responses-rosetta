@@ -4,10 +4,6 @@ import org.junit.jupiter.api.*;
 
 import static org.hamcrest.Matchers.*;
 
-/**
- * Runs against Ollama's {@code /v1/responses}. Ollama implements Open Responses without server side state, so
- * the last test documents that a {@code previous_response_id} is silently ignored rather than rejected.
- */
 public abstract class AbstractLocalResponsesIT extends AbstractResponsesIT
 {
   @Test

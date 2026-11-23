@@ -7,12 +7,12 @@
   <parent>
     <groupId>fr.simplex-software.workshop</groupId>
     <artifactId>java-ai-responses-rosetta</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
   </parent>
 
   <artifactId>responses-langchain4j-boot</artifactId>
   <name>Java AI Responses Rosetta :: LangChain4j on Spring Boot</name>
-  <description>The Responses API with LangChain4j's OpenAiResponsesChatModel declared as a Spring bean</description>
+  <description>The Responses API with LangChain4j on Spring Boot</description>
 
   <dependencyManagement>
     <dependencies>
