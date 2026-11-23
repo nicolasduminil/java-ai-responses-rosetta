@@ -61,21 +61,28 @@ if (question.webSearch())
 ```
 
 LangChain4j provides `OpenAiResponsesChatModel`, marked `@Experimental`. Its Responses specific parameters travel
-in `OpenAiResponsesChatRequestParameters`, which the application passes on each `ChatRequest`. The AI service
-abstraction builds generic request parameters, so this project calls the chat model directly and runs the tool
-loop itself:
+in `OpenAiResponsesChatRequestParameters`. An AI service method accepts them through a `ChatRequestParameters`
+argument, and `defaultedBy` keeps their type, so `previousResponseId` and `serverTools` reach every request of
+the AI service's tool loop:
 
 ```java
+interface ResponsesAssistant
+{
+  Result<String> chat(@UserMessage String question, ChatRequestParameters parameters);
+}
+
 var parameters = OpenAiResponsesChatRequestParameters.builder()
-  .toolSpecifications(toolSpecifications)
   .previousResponseId(question.previousResponseId());
 if (question.webSearch())
   parameters.serverTools(List.of(Map.of("type", "web_search")));
+var result = assistant.chat(question.question(), parameters.build());
 ```
 
 On Spring Boot the model is a `@Bean` built from a `@ConfigurationProperties` record. On Quarkus the extension
 builds it from `quarkus.langchain4j.openai.*` once the build time property `chat-model.mode` is set to
-`responses`, and a CDI producer hands it to the shared service.
+`responses`, and a CDI producer hands it to the shared service. Quarkus generates AI services at build time and
+finds programmatic `AiServices.builder` call sites through its Jandex index, so the Quarkus module indexes the
+shared jar with `quarkus.index-dependency.shared.*`.
 
 ## Conformance suite
 
@@ -117,8 +124,10 @@ because the runs described here were made without an OpenAI key.
    `ImageGeneration`, `Mcp`) and expressed as raw maps in LangChain4j (`serverTools`).
 4. The Responses model is opt in on every stack. Spring AI defaults to `chat-completions` and Quarkus LangChain4j
    to `chat-completion`. Request logs confirm that the three stacks call `/v1/responses` with the settings above.
-5. LangChain4j's AI services build generic request parameters, so the Responses parameters are set at the chat
-   model level, where the application also drives the tool loop.
+5. Both libraries run the tool loop for the application: Spring AI in the `ToolCallingAdvisor` that `ChatClient`
+   registers, LangChain4j in its AI services, which take the Responses parameters as a `ChatRequestParameters`
+   method argument. Spring AI's stateless design is deliberate: it replays the encrypted reasoning of reasoning
+   models from the application instead of storing it at OpenAI.
 
 ## Running
 
@@ -151,3 +160,5 @@ is skipped there unless `OPENAI_API_KEY` is defined as a project environment var
 1.0.0: first version, three stacks and the two tier conformance suite.
 
 1.0.1: Maven wrapper pinned to Maven 3.9.16, used by the README and the CircleCI pipeline. Unused AssertJ version management removed from the parent POM.
+
+1.0.2: the LangChain4j stacks share an AI service instead of a hand written tool loop, with the Responses parameters passed as a `ChatRequestParameters` argument. The Quarkus module indexes the shared jar so that Quarkus discovers the AI service at build time. README corrected accordingly.

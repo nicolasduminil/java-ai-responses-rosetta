@@ -6,7 +6,7 @@
 
   <groupId>fr.simplex-software.workshop</groupId>
   <artifactId>java-ai-responses-rosetta</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
   <packaging>pom</packaging>
   <name>Java AI Responses Rosetta</name>
   <description>The OpenAI / Open Responses API on Spring AI, LangChain4j on Spring Boot and LangChain4j on Quarkus</description>
