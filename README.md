@@ -1,5 +1,7 @@
 # Java AI Responses Rosetta
 
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/nicolasduminil/java-ai-responses-rosetta/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/nicolasduminil/java-ai-responses-rosetta/tree/master)
+
 One use case, three implementations, one shared test suite: the OpenAI Responses API (`POST /v1/responses`)
 as supported by Spring AI on Spring Boot, LangChain4j on Spring Boot and LangChain4j on Quarkus.
 
